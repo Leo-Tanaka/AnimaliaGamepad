@@ -1,0 +1,117 @@
+/* ---------- Tokens de design ---------- */
+:root {
+  --color-bg: #14171c;
+  --color-surface: #1c2129;
+  --color-surface-alt: #242b35;
+  --color-border: #2e3642;
+  --color-text: #e8ebef;
+  --color-text-dim: #8b94a3;
+
+  --color-accent: #5fd98a;       /* estado conectado / sinal ativo */
+  --color-accent-dim: rgba(95, 217, 138, 0.14);
+
+  --color-highlight: #ffb84d;    /* blocos de comando, paleta */
+  --color-highlight-dim: rgba(255, 184, 77, 0.14);
+
+  --color-action: #ff6452;       /* enviar / ação primária */
+  --color-action-dim: rgba(255, 100, 82, 0.16);
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ---------- Reset ---------- */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Estrutura geral do app ---------- */
+#app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-text-dim);
+  flex-shrink: 0;
+}
+
+.status-dot.conectado {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px var(--color-accent-dim);
+}
+
+.status-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.status-device {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-dim);
+}
+
+.screen {
+  flex: 1;
+  display: none;
+  min-height: 0;
+}
+
+.screen.ativa {
+  display: flex;
+}
