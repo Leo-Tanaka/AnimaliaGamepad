@@ -40,6 +40,36 @@
         </button>
       </div>
     </section>
+
+    <!-- ---------- Modo 2: blocos de comando (estilo Scratch) ---------- -->
+    <section id="tela-blocos" class="screen">
+      <div class="blocos-topo">
+        <span class="blocos-titulo">monte a sequência</span>
+        <button id="btn-voltar-dpad" class="botao-voltar" aria-label="Voltar para o direcional">◀ direcional</button>
+      </div>
+
+      <div class="paleta-wrap">
+        <p class="secao-rotulo">paleta</p>
+        <div id="paleta" class="lista-blocos paleta">
+          <div class="bloco" data-comando="F"><span class="bloco-seta">▲</span>frente</div>
+          <div class="bloco" data-comando="T"><span class="bloco-seta">▼</span>trás</div>
+          <div class="bloco" data-comando="E"><span class="bloco-seta">◀</span>esquerda</div>
+          <div class="bloco" data-comando="D"><span class="bloco-seta">▶</span>direita</div>
+        </div>
+      </div>
+
+      <div class="sequencia-wrap">
+        <p class="secao-rotulo">sequência <span id="contagem-sequencia">(0 passos)</span></p>
+        <div id="sequencia" class="lista-blocos sequencia">
+          <p class="sequencia-vazia">arraste blocos da paleta para cá</p>
+        </div>
+      </div>
+
+      <div class="acoes-blocos">
+        <button id="btn-apagar" class="botao-secundario">apagar</button>
+        <button id="btn-enviar" class="botao-primario">enviar sequência ▸</button>
+      </div>
+    </section>
   </div>
 </body>
 </html>

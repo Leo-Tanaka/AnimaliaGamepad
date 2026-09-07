@@ -196,3 +196,131 @@ button {
   font-size: 11px;
   font-weight: 600;
 }
+
+/* ---------- Modo 2: blocos de comando ---------- */
+#tela-blocos {
+  flex-direction: column;
+  padding: 20px;
+  gap: 16px;
+}
+
+.blocos-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blocos-titulo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.botao-voltar {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.secao-rotulo {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--color-text-dim);
+}
+
+.secao-rotulo span {
+  font-family: var(--font-mono);
+  color: var(--color-text-dim);
+}
+
+.lista-blocos {
+  display: flex;
+  gap: 8px;
+  min-height: 64px;
+  border-radius: var(--radius-md);
+  padding: 10px;
+}
+
+.paleta {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.sequencia-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sequencia {
+  flex: 1;
+  background: var(--color-surface-alt);
+  border: 1px dashed var(--color-border);
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow-y: auto;
+}
+
+.sequencia-vazia {
+  margin: auto;
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+.bloco {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--color-highlight-dim);
+  border: 1px solid var(--color-highlight);
+  color: var(--color-highlight);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bloco-seta {
+  font-size: 15px;
+}
+
+.acoes-blocos {
+  display: flex;
+  gap: 10px;
+}
+
+.botao-secundario,
+.botao-primario {
+  flex: 1;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+
+.botao-secundario {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-dim);
+}
+
+.botao-primario {
+  background: var(--color-action);
+  color: #1a0e0b;
+}
+
+.botao-primario:active,
+.botao-secundario:active {
+  transform: scale(0.98);
+}
