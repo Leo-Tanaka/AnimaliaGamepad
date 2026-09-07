@@ -15,7 +15,31 @@
 </head>
 <body>
   <div id="app">
-    <!-- A interface é montada aqui nos próximos passos -->
+    <header class="status-bar">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-label" class="status-label">Desconectado</span>
+      <span id="status-device" class="status-device"></span>
+    </header>
+
+    <!-- ---------- Modo 1: direcional (d-pad) ---------- -->
+    <section id="tela-dpad" class="screen ativa">
+      <div class="dpad-area">
+        <div class="dpad">
+          <button class="dpad-botao dpad-cima" data-comando="F" aria-label="Frente">▲</button>
+          <button class="dpad-botao dpad-esquerda" data-comando="E" aria-label="Esquerda">◀</button>
+          <div class="dpad-centro"></div>
+          <button class="dpad-botao dpad-direita" data-comando="D" aria-label="Direita">▶</button>
+          <button class="dpad-botao dpad-baixo" data-comando="T" aria-label="Trás">▼</button>
+        </div>
+      </div>
+
+      <div class="modo-area">
+        <button id="btn-alternar-modo" class="botao-alternar-modo" aria-label="Mudar para modo de blocos">
+          <span class="icone-blocos">▤</span>
+          <span class="rotulo-alternar">blocos</span>
+        </button>
+      </div>
+    </section>
   </div>
 </body>
 </html>
