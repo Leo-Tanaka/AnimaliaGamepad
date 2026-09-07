@@ -78,6 +78,12 @@ button {
   gap: 10px;
   padding: 14px 18px;
   border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  text-align: left;
+}
+
+.status-bar:active {
+  background: var(--color-surface);
 }
 
 .status-dot {
