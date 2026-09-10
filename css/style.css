@@ -86,6 +86,23 @@ button {
   background: var(--color-surface);
 }
 
+.status-log {
+  padding: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  border-bottom: 1px solid var(--color-border);
+  min-height: 15px;
+}
+
+.status-log.sucesso {
+  color: var(--color-accent);
+}
+
+.status-log.falha {
+  color: #ff5f6d;
+}
+
 .status-dot {
   width: 9px;
   height: 9px;

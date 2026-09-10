@@ -10,11 +10,17 @@ class ConexaoCarrinho {
     this.dispositivo = null;
     this.characteristicRx = null;
     this.aoMudarStatus = null; // callback(status: 'conectado' | 'desconectado' | 'conectando', nomeDispositivo?)
+    this.aoEnviarComando = null; // callback(texto: string, sucesso: boolean, erro?: Error)
   }
 
   /** Registra o callback chamado sempre que o estado da conexão muda. */
   definirCallbackStatus(callback) {
     this.aoMudarStatus = callback;
+  }
+
+  /** Registra o callback chamado a cada tentativa de envio de comando (debug). */
+  definirCallbackComando(callback) {
+    this.aoEnviarComando = callback;
   }
 
   get conectado() {
@@ -58,16 +64,28 @@ class ConexaoCarrinho {
 
   /** Envia uma linha de texto para o micro:bit (adiciona \n automaticamente). */
   async enviar(texto) {
-    if (!this.characteristicRx) {
-      throw new Error("Nenhum micro:bit conectado.");
+    try {
+      if (!this.characteristicRx) {
+        throw new Error("Nenhum micro:bit conectado.");
+      }
+      const dados = new TextEncoder().encode(`${texto}\n`);
+      await this.characteristicRx.writeValue(dados);
+      this._notificarComando(texto, true);
+    } catch (erro) {
+      this._notificarComando(texto, false, erro);
+      throw erro;
     }
-    const dados = new TextEncoder().encode(`${texto}\n`);
-    await this.characteristicRx.writeValue(dados);
   }
 
   _notificar(status, nomeDispositivo) {
     if (this.aoMudarStatus) {
       this.aoMudarStatus(status, nomeDispositivo);
+    }
+  }
+
+  _notificarComando(texto, sucesso, erro) {
+    if (this.aoEnviarComando) {
+      this.aoEnviarComando(texto, sucesso, erro);
     }
   }
 }

@@ -6,6 +6,7 @@ const botaoStatus = document.getElementById("status-bar");
 const statusDot = document.getElementById("status-dot");
 const statusLabel = document.getElementById("status-label");
 const statusDevice = document.getElementById("status-device");
+const statusLog = document.getElementById("status-log");
 
 const telaDpad = document.getElementById("tela-dpad");
 const telaBlocos = document.getElementById("tela-blocos");
@@ -33,6 +34,16 @@ botaoStatus.addEventListener("click", async () => {
     console.error("Falha ao conectar ao micro:bit:", erro);
     statusLabel.textContent = "falha ao conectar — toque para tentar de novo";
   }
+});
+
+// ---------- Debug: mostra na tela cada comando enviado (sucesso ou falha) ----------
+conexaoCarrinho.definirCallbackComando((texto, sucesso, erro) => {
+  const hora = new Date().toLocaleTimeString();
+  statusLog.classList.toggle("sucesso", sucesso);
+  statusLog.classList.toggle("falha", !sucesso);
+  statusLog.textContent = sucesso
+    ? `[${hora}] enviado: ${texto}`
+    : `[${hora}] falha ao enviar "${texto}": ${erro?.message ?? erro}`;
 });
 
 // ---------- Alternância entre modo direcional e modo de blocos ----------
