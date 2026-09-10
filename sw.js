@@ -1,4 +1,7 @@
-const CACHE_NOME = "carrinho-pwa-v1";
+// Suba este número (v2, v3, ...) a cada mudança relevante no app. É o que
+// faz o navegador perceber que o service worker mudou e disparar a
+// reinstalação — sem isso, o cache antigo fica preso para sempre.
+const CACHE_NOME = "carrinho-pwa-v2";
 
 const ARQUIVOS_ESTATICOS = [
   "./index.html",
@@ -16,7 +19,14 @@ self.addEventListener("install", (evento) => {
   evento.waitUntil(
     caches
       .open(CACHE_NOME)
-      .then((cache) => cache.addAll(ARQUIVOS_ESTATICOS))
+      .then((cache) =>
+        // { cache: "reload" } força buscar da rede, ignorando o cache HTTP
+        // do navegador — sem isso, o "cache do cache" também pode prender
+        // uma versão antiga mesmo neste passo.
+        cache.addAll(
+          ARQUIVOS_ESTATICOS.map((url) => new Request(url, { cache: "reload" }))
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -36,25 +46,26 @@ self.addEventListener("activate", (evento) => {
   );
 });
 
-// Cache-first para os arquivos da interface; a conexão Bluetooth em si
-// nunca passa pelo service worker (é feita diretamente pelo navegador).
+// Rede primeiro: com internet, sempre pega a versão mais recente do
+// Vercel. Só cai para o cache se a rede falhar (uso offline). A conexão
+// Bluetooth em si nunca passa pelo service worker.
 self.addEventListener("fetch", (evento) => {
   if (evento.request.method !== "GET") return;
 
   evento.respondWith(
-    caches.match(evento.request).then((respostaCache) => {
-      if (respostaCache) return respostaCache;
-
-      return fetch(evento.request)
-        .then((respostaRede) => {
-          const copia = respostaRede.clone();
-          caches
-            .open(CACHE_NOME)
-            .then((cache) => cache.put(evento.request, copia))
-            .catch(() => {});
-          return respostaRede;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
+    fetch(evento.request)
+      .then((respostaRede) => {
+        const copia = respostaRede.clone();
+        caches
+          .open(CACHE_NOME)
+          .then((cache) => cache.put(evento.request, copia))
+          .catch(() => {});
+        return respostaRede;
+      })
+      .catch(() =>
+        caches
+          .match(evento.request)
+          .then((respostaCache) => respostaCache || caches.match("./index.html"))
+      )
   );
 });
