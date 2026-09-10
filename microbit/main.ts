@@ -19,11 +19,11 @@
 // ===================================================================
 
 // ---------- Pinos da ponte H ----------
-// Motor esquerdo: P13 (sentido A) e P1 (sentido B)
+// Motor esquerdo: P13 (sentido A) e P14 (sentido B)
 // Motor direito:  P15 (sentido A) e P16 (sentido B)
 // Se algum motor girar ao contrário do esperado, troque o par de pinos dele.
 const ESQ_A = DigitalPin.P13
-const ESQ_B = DigitalPin.P1
+const ESQ_B = DigitalPin.P14
 const DIR_A = DigitalPin.P15
 const DIR_B = DigitalPin.P16
 

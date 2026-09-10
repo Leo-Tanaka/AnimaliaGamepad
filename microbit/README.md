@@ -21,7 +21,7 @@ PWA em `../js/ble.js` e `../js/blocks.js`.
 | Sinal          | Pino do micro:bit |
 |----------------|--------------------|
 | Motor esquerdo A | P13 |
-| Motor esquerdo B | P1  |
+| Motor esquerdo B | P14 |
 | Motor direito A  | P15 |
 | Motor direito B  | P16 |
 
