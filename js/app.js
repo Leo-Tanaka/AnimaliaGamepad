@@ -36,15 +36,27 @@ botaoStatus.addEventListener("click", async () => {
   }
 });
 
-// ---------- Debug: mostra na tela cada comando enviado (sucesso ou falha) ----------
-conexaoCarrinho.definirCallbackComando((texto, sucesso, erro) => {
+// ---------- Debug: mostra na tela os últimos eventos (comandos e diagnóstico) ----------
+const linhasLog = [];
+function anotarLog(texto, classe) {
   const hora = new Date().toLocaleTimeString();
-  statusLog.classList.toggle("sucesso", sucesso);
-  statusLog.classList.toggle("falha", !sucesso);
-  statusLog.textContent = sucesso
-    ? `[${hora}] enviado: ${texto}`
-    : `[${hora}] falha ao enviar "${texto}": ${erro?.message ?? erro}`;
+  linhasLog.push(`[${hora}] ${texto}`);
+  while (linhasLog.length > 6) linhasLog.shift();
+  statusLog.textContent = linhasLog.join("\n");
+  statusLog.classList.toggle("sucesso", classe === "sucesso");
+  statusLog.classList.toggle("falha", classe === "falha");
+}
+
+conexaoCarrinho.definirCallbackComando((texto, sucesso, erro) => {
+  if (sucesso) {
+    anotarLog(`enviado: ${texto}`, "sucesso");
+  } else {
+    const detalhe = erro?.name ? `${erro.name}: ${erro.message}` : erro?.message ?? erro;
+    anotarLog(`falha ao enviar "${texto}": ${detalhe}`, "falha");
+  }
 });
+
+conexaoCarrinho.definirCallbackLog((mensagem) => anotarLog(mensagem));
 
 // ---------- Alternância entre modo direcional e modo de blocos ----------
 function mostrarTela(tela) {

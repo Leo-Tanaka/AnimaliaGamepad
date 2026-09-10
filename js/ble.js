@@ -4,6 +4,7 @@
 
 const UART_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const UART_RX_CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"; // app -> micro:bit
+const UART_TX_CHARACTERISTIC_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"; // micro:bit -> app
 
 // Pausa entre escritas GATT consecutivas. Sem esse respiro o micro:bit
 // costuma rejeitar a segunda escrita com "GATT operation failed for
@@ -20,8 +21,10 @@ class ConexaoCarrinho {
   constructor() {
     this.dispositivo = null;
     this.characteristicRx = null;
+    this.characteristicTx = null;
     this.aoMudarStatus = null; // callback(status: 'conectado' | 'desconectado' | 'conectando', nomeDispositivo?)
     this.aoEnviarComando = null; // callback(texto: string, sucesso: boolean, erro?: Error)
+    this.aoLog = null; // callback(mensagem: string) — diagnóstico na tela
     this._filaEnvio = Promise.resolve();
   }
 
@@ -33,6 +36,11 @@ class ConexaoCarrinho {
   /** Registra o callback chamado a cada tentativa de envio de comando (debug). */
   definirCallbackComando(callback) {
     this.aoEnviarComando = callback;
+  }
+
+  /** Registra o callback de mensagens de diagnóstico (aparecem na tela). */
+  definirCallbackLog(callback) {
+    this.aoLog = callback;
   }
 
   get conectado() {
@@ -56,6 +64,7 @@ class ConexaoCarrinho {
       // escrita falha com erro de GATT em vez de "desconectado". Comum
       // quando o micro:bit reinicia por queda de tensão dos motores.
       this.characteristicRx = null;
+      this.characteristicTx = null;
       this._notificar("desconectado");
     });
 
@@ -67,6 +76,30 @@ class ConexaoCarrinho {
 
     this.dispositivo = dispositivo;
     this.characteristicRx = characteristicRx;
+
+    // Diagnóstico: quais tipos de escrita o micro:bit realmente aceita.
+    const p = characteristicRx.properties || {};
+    this._log(
+      `RX props → write:${!!p.write} semResposta:${!!p.writeWithoutResponse}`
+    );
+
+    // Assinar as notificações do TX é o que os exemplos oficiais de Web
+    // Bluetooth do micro:bit fazem; em alguns aparelhos a escrita no RX só
+    // passa a funcionar depois disso. Não é fatal se falhar.
+    try {
+      const characteristicTx = await servico.getCharacteristic(
+        UART_TX_CHARACTERISTIC_UUID
+      );
+      await characteristicTx.startNotifications();
+      characteristicTx.addEventListener(
+        "characteristicvaluechanged",
+        (ev) => this._aoReceberDoMicrobit(ev)
+      );
+      this.characteristicTx = characteristicTx;
+      this._log("TX: notificações ativadas");
+    } catch (erro) {
+      this._log(`TX: sem notificações (${erro.name || erro})`);
+    }
 
     this._notificar("conectado", dispositivo.name);
     return dispositivo.name;
@@ -108,27 +141,36 @@ class ConexaoCarrinho {
   }
 
   /**
-   * Escreve no UART RX preferindo "sem resposta" — bem mais estável no
-   * micro:bit do que "com resposta" (writeValue), que dispara o
-   * "GATT operation failed for unknown reason" sob envios seguidos.
+   * Tenta os dois tipos de escrita e reporta qual funcionou. "Sem resposta"
+   * costuma ser mais estável no micro:bit; "com resposta" é o plano B.
    */
   async _escrever(dados) {
     const rx = this.characteristicRx;
-    if (typeof rx.writeValueWithoutResponse === "function") {
+    const p = rx.properties || {};
+    const erros = [];
+
+    if (p.writeWithoutResponse && typeof rx.writeValueWithoutResponse === "function") {
       try {
         await rx.writeValueWithoutResponse(dados);
         return;
       } catch (erro) {
-        // Alguns aparelhos não suportam sem-resposta neste característico;
-        // aí sim cai para a escrita com resposta.
-        if (erro && erro.name === "NotSupportedError") {
-          await rx.writeValue(dados);
-          return;
-        }
-        throw erro;
+        erros.push(`semResposta:${erro.name || erro}`);
       }
     }
-    await rx.writeValue(dados);
+
+    try {
+      await rx.writeValue(dados);
+      return;
+    } catch (erro) {
+      erros.push(`comResposta:${erro.name || erro}`);
+    }
+
+    throw new Error(erros.join(" | "));
+  }
+
+  _aoReceberDoMicrobit(evento) {
+    const valor = new TextDecoder().decode(evento.target.value).trim();
+    if (valor) this._log(`micro:bit disse: ${valor}`);
   }
 
   _notificar(status, nomeDispositivo) {
@@ -141,6 +183,11 @@ class ConexaoCarrinho {
     if (this.aoEnviarComando) {
       this.aoEnviarComando(texto, sucesso, erro);
     }
+  }
+
+  _log(mensagem) {
+    console.log("[BLE]", mensagem);
+    if (this.aoLog) this.aoLog(mensagem);
   }
 }
 
