@@ -16,14 +16,19 @@ export function iniciarDpad(conexaoCarrinho) {
 
   botoes.forEach((botao) => {
     const comando = botao.dataset.comando;
+    let pressionado = false;
 
     const pressionar = (evento) => {
       evento.preventDefault();
+      if (pressionado) return;
+      pressionado = true;
       botao.classList.add("pressionado");
       enviarComSeguranca(comando);
     };
 
     const soltar = () => {
+      if (!pressionado) return;
+      pressionado = false;
       botao.classList.remove("pressionado");
       enviarComSeguranca("P");
     };

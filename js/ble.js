@@ -11,6 +11,7 @@ class ConexaoCarrinho {
     this.characteristicRx = null;
     this.aoMudarStatus = null; // callback(status: 'conectado' | 'desconectado' | 'conectando', nomeDispositivo?)
     this.aoEnviarComando = null; // callback(texto: string, sucesso: boolean, erro?: Error)
+    this._filaEnvio = Promise.resolve();
   }
 
   /** Registra o callback chamado sempre que o estado da conexão muda. */
@@ -62,8 +63,16 @@ class ConexaoCarrinho {
     }
   }
 
-  /** Envia uma linha de texto para o micro:bit (adiciona \n automaticamente). */
-  async enviar(texto) {
+  enviar(texto) {
+    const chamadaAtual = this._filaEnvio.then(
+      () => this._enviarAgora(texto),
+      () => this._enviarAgora(texto) // segue a fila mesmo se o anterior falhou
+    );
+    this._filaEnvio = chamadaAtual.catch(() => {});
+    return chamadaAtual;
+  }
+
+  async _enviarAgora(texto) {
     try {
       if (!this.characteristicRx) {
         throw new Error("Nenhum micro:bit conectado.");
