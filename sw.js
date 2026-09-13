@@ -1,7 +1,7 @@
 // Suba este número (v2, v3, ...) a cada mudança relevante no app. É o que
 // faz o navegador perceber que o service worker mudou e disparar a
 // reinstalação — sem isso, o cache antigo fica preso para sempre.
-const CACHE_NOME = "carrinho-pwa-v6";
+const CACHE_NOME = "carrinho-pwa-v7";
 
 const ARQUIVOS_ESTATICOS = [
   "./index.html",
@@ -11,6 +11,8 @@ const ARQUIVOS_ESTATICOS = [
   "./js/ble.js",
   "./js/dpad.js",
   "./js/blocks.js",
+  "./js/ajustes.js",
+  "./js/mapeamento.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./img/logo-animalia.png",

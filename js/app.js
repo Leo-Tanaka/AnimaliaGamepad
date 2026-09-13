@@ -1,6 +1,7 @@
 import { conexaoCarrinho } from "./ble.js";
 import { iniciarDpad } from "./dpad.js";
 import { iniciarBlocos } from "./blocks.js";
+import { iniciarAjustes } from "./ajustes.js";
 
 const botaoStatus = document.getElementById("status-bar");
 const statusDot = document.getElementById("status-dot");
@@ -10,8 +11,11 @@ const statusLog = document.getElementById("status-log");
 
 const telaDpad = document.getElementById("tela-dpad");
 const telaBlocos = document.getElementById("tela-blocos");
+const telaAjustes = document.getElementById("tela-ajustes");
 const btnAlternarModo = document.getElementById("btn-alternar-modo");
 const btnVoltarDpad = document.getElementById("btn-voltar-dpad");
+const btnAjustes = document.getElementById("btn-ajustes");
+const btnVoltarAjustes = document.getElementById("btn-voltar-ajustes");
 
 // ---------- Status de conexão ----------
 conexaoCarrinho.definirCallbackStatus((status, nomeDispositivo) => {
@@ -60,16 +64,21 @@ conexaoCarrinho.definirCallbackLog((mensagem) => anotarLog(mensagem));
 
 // ---------- Alternância entre modo direcional e modo de blocos ----------
 function mostrarTela(tela) {
-  [telaDpad, telaBlocos].forEach((el) => el.classList.remove("ativa"));
+  [telaDpad, telaBlocos, telaAjustes].forEach((el) =>
+    el.classList.remove("ativa")
+  );
   tela.classList.add("ativa");
 }
 
 btnAlternarModo.addEventListener("click", () => mostrarTela(telaBlocos));
 btnVoltarDpad.addEventListener("click", () => mostrarTela(telaDpad));
+btnAjustes.addEventListener("click", () => mostrarTela(telaAjustes));
+btnVoltarAjustes.addEventListener("click", () => mostrarTela(telaDpad));
 
 // ---------- Inicialização dos controles ----------
 iniciarDpad(conexaoCarrinho);
 iniciarBlocos(conexaoCarrinho);
+iniciarAjustes(conexaoCarrinho);
 
 // ---------- Registro do service worker (PWA instalável) ----------
 if ("serviceWorker" in navigator) {

@@ -2,6 +2,8 @@
 // A paleta permite clonar blocos para a trilha de sequência, onde podem ser
 // reordenados livremente. "Enviar" empacota a sequência numa única string.
 
+import { traduzir } from "./mapeamento.js";
+
 const ROTULOS = { F: "frente", T: "trás", E: "esquerda", D: "direita" };
 const SETAS = { F: "▲", T: "▼", E: "◀", D: "▶" };
 
@@ -47,7 +49,10 @@ export function iniciarBlocos(conexaoCarrinho) {
     const blocos = [...sequencia.querySelectorAll(".bloco")];
     if (blocos.length === 0) return;
 
-    const comandos = blocos.map((bloco) => bloco.dataset.comando).join(",");
+    // Cada passo sai já traduzido pelo mapeamento da tela de ajustes.
+    const comandos = blocos
+      .map((bloco) => traduzir(bloco.dataset.comando))
+      .join(",");
 
     if (!conexaoCarrinho.conectado) {
       console.warn("Não é possível enviar: carrinho desconectado.");

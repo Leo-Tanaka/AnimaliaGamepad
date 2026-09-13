@@ -2,6 +2,8 @@
 // Ao pressionar um botão, envia o comando imediatamente e mantém enviando
 // "parar" ao soltar ou ao arrastar o dedo para fora do botão.
 
+import { traduzir } from "./mapeamento.js";
+
 export function iniciarDpad(conexaoCarrinho) {
   const botoes = document.querySelectorAll("#tela-dpad .dpad-botao");
 
@@ -23,7 +25,8 @@ export function iniciarDpad(conexaoCarrinho) {
       if (pressionado) return;
       pressionado = true;
       botao.classList.add("pressionado");
-      enviarComSeguranca(comando);
+      // traduzir(): respeita o mapeamento escolhido na tela de ajustes
+      enviarComSeguranca(traduzir(comando));
     };
 
     const soltar = () => {

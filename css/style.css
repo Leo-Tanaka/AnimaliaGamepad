@@ -1,6 +1,8 @@
 /* ---------- Tokens de design ---------- */
 /* Cores extraídas das logos: rosa #ED145B, turquesa #22DBC0. */
 :root {
+  color-scheme: dark;
+
   --color-bg: #0f1216;
   --color-bg-glow: #151b22;
   --color-surface: #191f27;
@@ -494,4 +496,124 @@ img {
   .marca-ff { height: 26px; }
   #tela-dpad { padding: 10px 20px 16px; gap: 10px; }
   :root { --dpad-celula: 64px; --dpad-gap: 8px; }
+}
+
+/* ---------- Tela de ajustes (qual movimento cada seta faz) ---------- */
+.botao-config {
+  margin-left: auto;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text-dim);
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.botao-config:active {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+#tela-ajustes {
+  flex-direction: column;
+  padding: 18px 20px 20px;
+  gap: 14px;
+}
+
+.ajustes-ajuda {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-dim);
+}
+
+.lista-ajustes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.ajuste-linha {
+  --cor-bloco: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--cor-bloco);
+  border-radius: var(--radius-md);
+}
+
+.ajuste-linha[data-comando="F"] { --cor-bloco: var(--cmd-F); }
+.ajuste-linha[data-comando="T"] { --cor-bloco: var(--cmd-T); }
+.ajuste-linha[data-comando="E"] { --cor-bloco: var(--cmd-E); }
+.ajuste-linha[data-comando="D"] { --cor-bloco: var(--cmd-D); }
+
+.ajuste-rotulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 104px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--cor-bloco);
+}
+
+.ajuste-select {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.ajuste-testar {
+  flex-shrink: 0;
+  padding: 11px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--color-text-dim);
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.ajuste-testar:active {
+  border-color: var(--cor-bloco);
+  color: var(--cor-bloco);
+}
+
+.ajuste-testar:disabled {
+  opacity: 0.5;
+}
+
+.aviso-ajustes {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--cmd-T);
+  background: rgba(255, 176, 32, 0.12);
+  border: 1px solid rgba(255, 176, 32, 0.4);
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 900px) {
+  #tela-ajustes { padding: 24px 40px 32px; gap: 18px; }
+  .ajustes-ajuda { font-size: 14px; max-width: 620px; }
+  .ajuste-linha { padding: 16px; }
+  .ajuste-rotulo { min-width: 140px; font-size: 14px; }
 }

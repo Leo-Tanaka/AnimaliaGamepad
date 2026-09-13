@@ -30,6 +30,9 @@
         <img class="marca-logo marca-animalia" src="img/logo-animalia.png" alt="Animalia" />
         <span class="marca-divisor" aria-hidden="true"></span>
         <img class="marca-logo marca-ff" src="img/logo-future-fest.png" alt="Future Fest" />
+        <button id="btn-ajustes" class="botao-config" type="button" aria-label="Ajustar movimentos">
+          <span aria-hidden="true">&#9881;</span>
+        </button>
       </header>
 
       <div class="dpad-linha">
@@ -79,6 +82,27 @@
       <div class="acoes-blocos">
         <button id="btn-apagar" class="botao-secundario">apagar</button>
         <button id="btn-enviar" class="botao-primario">enviar sequência ▸</button>
+      </div>
+    </section>
+
+    <!-- ---------- Ajustes: qual movimento cada seta realmente faz ---------- -->
+    <section id="tela-ajustes" class="screen">
+      <div class="blocos-topo">
+        <span class="blocos-titulo">ajustar movimentos</span>
+        <button id="btn-voltar-ajustes" class="botao-voltar" aria-label="Voltar para o direcional">&#9664; direcional</button>
+      </div>
+
+      <p class="ajustes-ajuda">
+        Se o carrinho vai para o lado errado, troque aqui o que cada seta faz &mdash;
+        sem precisar mexer nos fios da ponte H.
+      </p>
+
+      <div id="lista-ajustes" class="lista-ajustes"></div>
+
+      <p id="aviso-ajustes" class="aviso-ajustes" hidden></p>
+
+      <div class="acoes-blocos">
+        <button id="btn-restaurar" class="botao-secundario">restaurar padr&atilde;o</button>
       </div>
     </section>
   </div>
