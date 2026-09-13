@@ -1,28 +1,41 @@
 /* ---------- Tokens de design ---------- */
+/* Cores extraídas das logos: rosa #ED145B, turquesa #22DBC0. */
 :root {
-  --color-bg: #14171c;
-  --color-surface: #1c2129;
-  --color-surface-alt: #242b35;
-  --color-border: #2e3642;
-  --color-text: #e8ebef;
-  --color-text-dim: #8b94a3;
+  --color-bg: #0f1216;
+  --color-bg-glow: #151b22;
+  --color-surface: #191f27;
+  --color-surface-alt: #212932;
+  --color-border: #2b3440;
+  --color-border-soft: #222a34;
+  --color-text: #eef1f5;
+  --color-text-dim: #8d97a6;
 
-  --color-accent: #5fd98a;       /* estado conectado / sinal ativo */
-  --color-accent-dim: rgba(95, 217, 138, 0.14);
+  --color-brand: #22dbc0;        /* turquesa Future Fest */
+  --color-brand-dim: rgba(34, 219, 192, 0.14);
+  --color-pink: #ed145b;         /* rosa Future Fest / Animalia */
+  --color-pink-dim: rgba(237, 20, 91, 0.16);
 
-  --color-highlight: #ffb84d;    /* blocos de comando, paleta */
-  --color-highlight-dim: rgba(255, 184, 77, 0.14);
+  --color-accent: var(--color-brand);      /* estado conectado */
+  --color-accent-dim: var(--color-brand-dim);
+  --color-action: var(--color-pink);       /* ação primária */
+  --color-erro: #ff5f6d;
 
-  --color-action: #ff6452;       /* enviar / ação primária */
-  --color-action-dim: rgba(255, 100, 82, 0.16);
+  /* Uma cor por movimento — reforçada pela seta, nunca só pela cor. */
+  --cmd-F: #22dbc0;
+  --cmd-T: #ffb020;
+  --cmd-E: #5b8cff;
+  --cmd-D: #ed145b;
 
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "IBM Plex Sans", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+
+  --dpad-celula: 78px;
+  --dpad-gap: 10px;
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -41,7 +54,9 @@ html, body {
 }
 
 body {
-  background: var(--color-bg);
+  background:
+    radial-gradient(1100px 600px at 12% -10%, var(--color-bg-glow), transparent 60%),
+    var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-user-select: none;
@@ -54,6 +69,11 @@ button {
   background: none;
   color: inherit;
   cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -77,7 +97,8 @@ button {
   align-items: center;
   gap: 10px;
   padding: 14px 18px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
   width: 100%;
   text-align: left;
 }
@@ -86,32 +107,13 @@ button {
   background: var(--color-surface);
 }
 
-.status-log {
-  padding: 6px 18px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.5;
-  color: var(--color-text-dim);
-  border-bottom: 1px solid var(--color-border);
-  min-height: 15px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.status-log.sucesso {
-  color: var(--color-accent);
-}
-
-.status-log.falha {
-  color: #ff5f6d;
-}
-
 .status-dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
   background: var(--color-text-dim);
   flex-shrink: 0;
+  transition: background 160ms ease, box-shadow 160ms ease;
 }
 
 .status-dot.conectado {
@@ -123,6 +125,7 @@ button {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14px;
+  letter-spacing: 0.01em;
 }
 
 .status-device {
@@ -131,6 +134,21 @@ button {
   font-size: 12px;
   color: var(--color-text-dim);
 }
+
+.status-log {
+  padding: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-text-dim);
+  border-bottom: 1px solid var(--color-border-soft);
+  min-height: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.status-log.sucesso { color: var(--color-accent); }
+.status-log.falha   { color: var(--color-erro); }
 
 .screen {
   flex: 1;
@@ -142,25 +160,60 @@ button {
   display: flex;
 }
 
+/* ---------- Marca (logos na tela inicial) ---------- */
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 2px 0;
+}
+
+.marca-logo {
+  height: 30px;
+  width: auto;
+  object-fit: contain;
+}
+
+.marca-ff {
+  height: 34px;
+}
+
+.marca-divisor {
+  width: 1px;
+  height: 24px;
+  background: var(--color-border);
+}
+
 /* ---------- Modo 1: direcional (d-pad) ---------- */
 #tela-dpad {
-  padding: 24px;
+  flex-direction: column;
+  padding: 18px 24px 24px;
+  gap: 16px;
+}
+
+/* O d-pad fica encostado à esquerda: alcance natural do polegar e sobra
+   espaço à direita para as ações — importante em tablets, onde o centro
+   da tela fica longe das duas mãos. */
+.dpad-linha {
+  flex: 1;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 48px;
+  justify-content: flex-start;
+  gap: 24px;
+  min-height: 0;
 }
 
 .dpad-area {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .dpad {
   display: grid;
-  grid-template-columns: 76px 76px 76px;
-  grid-template-rows: 76px 76px 76px;
-  gap: 8px;
+  grid-template-columns: repeat(3, var(--dpad-celula));
+  grid-template-rows: repeat(3, var(--dpad-celula));
+  gap: var(--dpad-gap);
 }
 
 .dpad-botao {
@@ -172,7 +225,11 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 80ms ease, transform 80ms ease;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+  /* Impede o navegador de sequestrar o toque com rolagem/zoom, o que
+     fazia o botao "soltar" sozinho no meio de um arrasto. */
+  touch-action: none;
+  transition: background 80ms ease, transform 80ms ease, border-color 80ms ease;
 }
 
 .dpad-botao:active,
@@ -180,52 +237,60 @@ button {
   background: var(--color-accent-dim);
   border-color: var(--color-accent);
   color: var(--color-accent);
+  box-shadow: 0 0 18px var(--color-accent-dim);
   transform: scale(0.94);
 }
 
 .dpad-cima    { grid-column: 2; grid-row: 1; }
 .dpad-esquerda{ grid-column: 1; grid-row: 2; }
-.dpad-centro  { grid-column: 2; grid-row: 2; background: var(--color-surface-alt); border-radius: var(--radius-sm); }
 .dpad-direita { grid-column: 3; grid-row: 2; }
 .dpad-baixo   { grid-column: 2; grid-row: 3; }
 
+.dpad-centro {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--color-surface-alt);
+  border-radius: 50%;
+  margin: 22%;
+}
+
 .modo-area {
+  margin-left: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .botao-alternar-modo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 18px 14px;
+  gap: 8px;
+  padding: 20px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-dim);
+  transition: border-color 120ms ease, color 120ms ease;
 }
 
 .botao-alternar-modo:active {
-  border-color: var(--color-highlight);
-  color: var(--color-highlight);
+  border-color: var(--color-pink);
+  color: var(--color-pink);
 }
 
-.icone-blocos {
-  font-size: 22px;
-}
+.icone-blocos { font-size: 24px; }
 
 .rotulo-alternar {
   font-family: var(--font-display);
   font-size: 11px;
   font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 /* ---------- Modo 2: blocos de comando ---------- */
 #tela-blocos {
   flex-direction: column;
-  padding: 20px;
+  padding: 18px 20px 20px;
   gap: 16px;
 }
 
@@ -233,12 +298,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .blocos-titulo {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .botao-voltar {
@@ -246,20 +312,28 @@ button {
   font-size: 12px;
   font-weight: 600;
   color: var(--color-text-dim);
-  padding: 8px 10px;
+  padding: 9px 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
 }
 
+.botao-voltar:active {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
 .secao-rotulo {
   margin: 0 0 8px;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-text-dim);
 }
 
 .secao-rotulo span {
   font-family: var(--font-mono);
-  color: var(--color-text-dim);
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .lista-blocos {
@@ -290,10 +364,24 @@ button {
   flex-direction: column;
   align-items: stretch;
   overflow-y: auto;
+  counter-reset: passo;
 }
 
 .sequencia .bloco {
   width: 100%;
+}
+
+/* Numera os passos para deixar a ordem de execução explícita. */
+.sequencia .bloco::before {
+  counter-increment: passo;
+  content: counter(passo);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-dim);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 2px 7px;
+  margin-right: 2px;
 }
 
 .sequencia-vazia {
@@ -302,14 +390,17 @@ button {
   color: var(--color-text-dim);
 }
 
+/* ---------- Blocos: uma cor por movimento ---------- */
 .bloco {
+  --cor-bloco: var(--color-text-dim);
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  background: var(--color-highlight-dim);
-  border: 1px solid var(--color-highlight);
-  color: var(--color-highlight);
+  gap: 8px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--cor-bloco) 14%, transparent);
+  border: 1px solid var(--cor-bloco);
+  border-left: 4px solid var(--cor-bloco);
+  color: var(--cor-bloco);
   border-radius: var(--radius-sm);
   font-family: var(--font-display);
   font-weight: 600;
@@ -318,9 +409,15 @@ button {
   flex-shrink: 0;
 }
 
-.bloco-seta {
-  font-size: 15px;
-}
+.bloco[data-comando="F"] { --cor-bloco: var(--cmd-F); }
+.bloco[data-comando="T"] { --cor-bloco: var(--cmd-T); }
+.bloco[data-comando="E"] { --cor-bloco: var(--cmd-E); }
+.bloco[data-comando="D"] { --cor-bloco: var(--cmd-D); }
+
+.bloco-seta { font-size: 15px; }
+
+.sortable-ghost { opacity: 0.35; }
+.sortable-drag  { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45); }
 
 .acoes-blocos {
   display: flex;
@@ -336,6 +433,7 @@ button {
   font-weight: 600;
   font-size: 14px;
   text-align: center;
+  transition: transform 80ms ease;
 }
 
 .botao-secundario {
@@ -346,10 +444,54 @@ button {
 
 .botao-primario {
   background: var(--color-action);
-  color: #1a0e0b;
+  color: #ffffff;
+  box-shadow: 0 6px 20px var(--color-pink-dim);
+}
+
+.botao-primario:disabled {
+  opacity: 0.6;
 }
 
 .botao-primario:active,
 .botao-secundario:active {
   transform: scale(0.98);
+}
+
+/* ---------- Telas maiores (tablets) ---------- */
+@media (min-width: 600px) {
+  :root { --dpad-celula: 96px; --dpad-gap: 12px; }
+  .marca-logo { height: 34px; }
+  .marca-ff { height: 40px; }
+  #tela-dpad { padding: 22px 32px 32px; }
+  .dpad-linha { gap: 32px; }
+}
+
+@media (min-width: 900px) {
+  :root { --dpad-celula: 118px; --dpad-gap: 14px; }
+  .dpad-botao { font-size: 34px; }
+  .marca { gap: 22px; }
+  .marca-logo { height: 40px; }
+  .marca-ff { height: 46px; }
+  #tela-dpad { padding: 28px 48px 44px; }
+  .botao-alternar-modo { padding: 26px 24px; }
+  .icone-blocos { font-size: 30px; }
+  .rotulo-alternar { font-size: 13px; }
+  /* Em tablet a sequência ganha duas colunas: menos rolagem e visão geral
+     dos passos montados. */
+  #tela-blocos { padding: 24px 40px 32px; }
+  .sequencia {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+  }
+  .sequencia .bloco { width: calc(50% - 4px); }
+}
+
+/* Telas baixas (celular deitado): encolhe a marca para sobrar altura. */
+@media (max-height: 480px) {
+  .marca-logo { height: 22px; }
+  .marca-ff { height: 26px; }
+  #tela-dpad { padding: 10px 20px 16px; gap: 10px; }
+  :root { --dpad-celula: 64px; --dpad-gap: 8px; }
 }

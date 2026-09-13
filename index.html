@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>Controle do Carrinho</title>
-  <meta name="theme-color" content="#14171C" />
+  <meta name="theme-color" content="#0F1216" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -26,21 +26,29 @@
 
     <!-- ---------- Modo 1: direcional (d-pad) ---------- -->
     <section id="tela-dpad" class="screen ativa">
-      <div class="dpad-area">
-        <div class="dpad">
-          <button class="dpad-botao dpad-cima" data-comando="F" aria-label="Frente">▲</button>
-          <button class="dpad-botao dpad-esquerda" data-comando="E" aria-label="Esquerda">◀</button>
-          <div class="dpad-centro"></div>
-          <button class="dpad-botao dpad-direita" data-comando="D" aria-label="Direita">▶</button>
-          <button class="dpad-botao dpad-baixo" data-comando="T" aria-label="Trás">▼</button>
-        </div>
-      </div>
+      <header class="marca">
+        <img class="marca-logo marca-animalia" src="img/logo-animalia.png" alt="Animalia" />
+        <span class="marca-divisor" aria-hidden="true"></span>
+        <img class="marca-logo marca-ff" src="img/logo-future-fest.png" alt="Future Fest" />
+      </header>
 
-      <div class="modo-area">
-        <button id="btn-alternar-modo" class="botao-alternar-modo" aria-label="Mudar para modo de blocos">
-          <span class="icone-blocos">▤</span>
-          <span class="rotulo-alternar">blocos</span>
-        </button>
+      <div class="dpad-linha">
+        <div class="dpad-area">
+          <div class="dpad">
+            <button class="dpad-botao dpad-cima" data-comando="F" aria-label="Frente">▲</button>
+            <button class="dpad-botao dpad-esquerda" data-comando="E" aria-label="Esquerda">◀</button>
+            <div class="dpad-centro" aria-hidden="true"></div>
+            <button class="dpad-botao dpad-direita" data-comando="D" aria-label="Direita">▶</button>
+            <button class="dpad-botao dpad-baixo" data-comando="T" aria-label="Trás">▼</button>
+          </div>
+        </div>
+
+        <div class="modo-area">
+          <button id="btn-alternar-modo" class="botao-alternar-modo" aria-label="Mudar para modo de blocos">
+            <span class="icone-blocos" aria-hidden="true">▤</span>
+            <span class="rotulo-alternar">blocos</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -54,10 +62,10 @@
       <div class="paleta-wrap">
         <p class="secao-rotulo">paleta</p>
         <div id="paleta" class="lista-blocos paleta">
-          <div class="bloco" data-comando="F"><span class="bloco-seta">▲</span>frente</div>
-          <div class="bloco" data-comando="T"><span class="bloco-seta">▼</span>trás</div>
-          <div class="bloco" data-comando="E"><span class="bloco-seta">◀</span>esquerda</div>
-          <div class="bloco" data-comando="D"><span class="bloco-seta">▶</span>direita</div>
+          <div class="bloco" data-comando="F"><span class="bloco-seta" aria-hidden="true">▲</span>frente</div>
+          <div class="bloco" data-comando="T"><span class="bloco-seta" aria-hidden="true">▼</span>trás</div>
+          <div class="bloco" data-comando="E"><span class="bloco-seta" aria-hidden="true">◀</span>esquerda</div>
+          <div class="bloco" data-comando="D"><span class="bloco-seta" aria-hidden="true">▶</span>direita</div>
         </div>
       </div>
 
