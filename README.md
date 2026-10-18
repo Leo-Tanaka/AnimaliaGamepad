@@ -22,7 +22,8 @@ Abra no Chrome do Android. Em produção, hospede em qualquer serviço com HTTPS
 - **Direcional (d-pad):** botão pressionado envia o comando imediatamente;
   soltar o botão envia `P` (parar).
 - **Blocos:** arraste blocos da paleta para a trilha de sequência, na ordem
-  desejada. **Enviar** empacota tudo numa string e manda de uma vez;
+  desejada. **Enviar** executa a sequência passo a passo (veja abaixo),
+  destacando o passo atual; durante a execução o mesmo botão vira **parar**.
   **Apagar** limpa a trilha.
 - **Ajustes (⚙ na tela inicial):** define qual movimento cada seta realmente
   faz. Se o carrinho vira para o lado errado por causa da ligação dos motores

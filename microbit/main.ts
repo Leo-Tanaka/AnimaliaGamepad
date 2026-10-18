@@ -15,7 +15,11 @@
 //   "E"        -> esquerda      (modo direcional, imediato)
 //   "D"        -> direita       (modo direcional, imediato)
 //   "P"        -> parar         (modo direcional, imediato)
-//   "SEQ:F,D,T"-> sequência de passos (modo blocos), executada em ordem
+//   "SEQ:F,D,T"-> sequência de passos numa tacada só — LEGADO. O app agora
+//                 manda um comando por vez e cronometra os passos do lado
+//                 dele, porque a escrita no UART do micro:bit tem limite de
+//                 20 bytes e sequências longas eram cortadas. O handler
+//                 continua aqui por compatibilidade; nada a regravar.
 // ===================================================================
 
 // ---------- Pinos da ponte H ----------

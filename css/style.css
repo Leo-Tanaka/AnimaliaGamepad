@@ -418,6 +418,13 @@ img {
 
 .bloco-seta { font-size: 15px; }
 
+/* Passo que esta rodando agora na sequencia. */
+.sequencia .bloco.executando {
+  background: color-mix(in srgb, var(--cor-bloco) 34%, transparent);
+  color: var(--color-text);
+  box-shadow: 0 0 0 2px var(--cor-bloco);
+}
+
 .sortable-ghost { opacity: 0.35; }
 .sortable-drag  { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45); }
 
@@ -450,8 +457,17 @@ img {
   box-shadow: 0 6px 20px var(--color-pink-dim);
 }
 
-.botao-primario:disabled {
-  opacity: 0.6;
+.botao-primario:disabled,
+.botao-secundario:disabled {
+  opacity: 0.5;
+}
+
+/* Enquanto a sequencia roda o botao primario vira "parar". */
+.botao-primario.executando {
+  background: var(--color-surface);
+  border: 1px solid var(--color-pink);
+  color: var(--color-pink);
+  box-shadow: none;
 }
 
 .botao-primario:active,
