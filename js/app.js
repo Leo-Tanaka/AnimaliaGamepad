@@ -41,14 +41,25 @@ botaoStatus.addEventListener("click", async () => {
 });
 
 // ---------- Debug: mostra na tela os últimos eventos (comandos e diagnóstico) ----------
+// O painel vive na tela de ajustes, entao cabe mais historico e cada linha
+// guarda o proprio estado (antes a cor do ultimo evento tingia o bloco todo).
+const MAX_LINHAS_LOG = 12;
 const linhasLog = [];
+
 function anotarLog(texto, classe) {
   const hora = new Date().toLocaleTimeString();
-  linhasLog.push(`[${hora}] ${texto}`);
-  while (linhasLog.length > 6) linhasLog.shift();
-  statusLog.textContent = linhasLog.join("\n");
-  statusLog.classList.toggle("sucesso", classe === "sucesso");
-  statusLog.classList.toggle("falha", classe === "falha");
+  linhasLog.push({ texto: `[${hora}] ${texto}`, classe });
+  while (linhasLog.length > MAX_LINHAS_LOG) linhasLog.shift();
+
+  statusLog.replaceChildren(
+    ...linhasLog.map((linha) => {
+      const el = document.createElement("div");
+      el.className = linha.classe ? `log-linha ${linha.classe}` : "log-linha";
+      el.textContent = linha.texto;
+      return el;
+    })
+  );
+  statusLog.scrollTop = statusLog.scrollHeight;
 }
 
 conexaoCarrinho.definirCallbackComando((texto, sucesso, erro) => {

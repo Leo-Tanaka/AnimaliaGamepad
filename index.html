@@ -22,7 +22,6 @@
       <span id="status-label" class="status-label">toque para conectar</span>
       <span id="status-device" class="status-device"></span>
     </button>
-    <div id="status-log" class="status-log"></div>
 
     <!-- ---------- Modo 1: direcional (d-pad) ---------- -->
     <section id="tela-dpad" class="screen ativa">
@@ -100,6 +99,11 @@
       <div id="lista-ajustes" class="lista-ajustes"></div>
 
       <p id="aviso-ajustes" class="aviso-ajustes" hidden></p>
+
+      <div class="log-wrap">
+        <p class="secao-rotulo">registro de comandos</p>
+        <div id="status-log" class="status-log" role="log" aria-live="polite"></div>
+      </div>
 
       <div class="acoes-blocos">
         <button id="btn-restaurar" class="botao-secundario">restaurar padr&atilde;o</button>

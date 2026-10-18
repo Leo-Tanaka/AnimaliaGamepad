@@ -137,20 +137,37 @@ img {
   color: var(--color-text-dim);
 }
 
+/* Registro de comandos: fica so na tela de ajustes, fora do caminho de
+   quem esta apenas dirigindo o carrinho. */
+.log-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .status-log {
-  padding: 6px 18px;
+  padding: 10px 12px;
   font-family: var(--font-mono);
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: var(--color-text-dim);
-  border-bottom: 1px solid var(--color-border-soft);
-  min-height: 15px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  min-height: 46px;
+  max-height: 150px;
+  overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.status-log.sucesso { color: var(--color-accent); }
-.status-log.falha   { color: var(--color-erro); }
+.status-log:empty::before {
+  content: "nada registrado ainda";
+  opacity: 0.6;
+}
+
+.log-linha.sucesso { color: var(--color-accent); }
+.log-linha.falha   { color: var(--color-erro); }
 
 .screen {
   flex: 1;
